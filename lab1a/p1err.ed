@@ -1,0 +1,14 @@
+const number a = 2, b = 3, c = 4 
+number min = a, max = a
+
+if(b < min)
+	min = b
+if(c < min)
+	min = c
+
+if(b > max)
+	max = b     
+1if(c > max)	 # ERROR
+	max = c
+
+print("Max is ${a}, min is ${b}) #ERROR
