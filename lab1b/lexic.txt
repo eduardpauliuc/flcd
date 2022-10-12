@@ -1,0 +1,32 @@
+Alphabet:
+    a. A-Z, a-z
+    b. decimal digits
+    c. underscore
+
+1. Lexic:
+
+    I. special symbols
+        a. operators: + - * / % < <= = == >= > !=
+        b. separators: () [] {} , ; space
+        c. reserved words:
+            - const, number, string
+            - print, for, while, in, read_integer, read_string
+    
+    II. identifiers
+        <digit> ::= 0|1|2|3|4|5|6|7|8|9
+        <nonzero_digit> ::= 0|1|2|3|4|5|6|7|8|9
+        <letter> ::= a|b|...|z|A|B|...|Z
+        <special_symbol> ::= _|$|+|-|*|/|%|<|=|>|!|space
+        <language_character> ::= <digit> | <letter> |<special_symbol>
+        <identifier> ::= _|<letter>|<identifier><letter>|<identifier><digit>|<identifier>_|
+        
+    III. constants
+        a. integer
+            <number> ::= <nonzero><number>|<number><digit>|<digit>
+            <nonzero_number> ::= <nonzero><number>|<number><digit>|<nonzero>
+            <signed_number> ::= +<nonzero_number>|-<nonzero_number>|<number>
+        b. character
+            <character> ::= '<language_character>'|''
+        c. string
+            <string> ::= <language_character>|<language_character><string>|${<identifier>}<string>
+            <const_string> ::= "<string>"|""
