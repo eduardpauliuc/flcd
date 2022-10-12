@@ -1,10 +1,11 @@
-number a = read_integer(), b = read_integer()
+number a = read_integer();
+number b = read_integer();
 
 while(a != b){	
 	if(a > b)
-		b -= a
+		b -= a;
 	else
-		a -= b
+		a -= b;
 }
 
-print("GCD of the two numbers is ${a}")
+print("GCD of the two numbers is ${a}");
