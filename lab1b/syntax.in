@@ -1,0 +1,36 @@
+<program> ::= <stmt>|<stmt><program> | <comment><program>
+<stmt> ::= <var_decl_stmt>|<assign_stmt>;|<struct_stmt>|<io_stmt>;
+<struct_stmt> ::= <if_stmt>|<for_stmt>|<while_stmt>
+<io_stmt> ::= <read_stmt>|<print_stmt>
+
+<stmt_list> ::= <stmt> | <stmt><stmt_list>
+<stmt_block> ::= { <stmt_list> } | <stmt>
+
+<if_stmt> ::= if(<condition>) <stmt_block> | if(<condition>) <stmt_block> else <stmt_block>
+<while_stmt> ::= while(<condition>) <stmt_block>
+<for_stmt> ::= for(<identifier> in <identifier>) <stmt_block>
+<io_stmt> ::= read_integer() | read_string() | print(const_string)
+
+
+<primitive_type> ::= number|string
+<primitive_ctype> ::= <primitive_type> | const <primitive_type>
+<array_type> ::= <primitive_ctype>[] | <primitive_ctype>[<number>]
+<type> ::= <primitive_ctype> | <array_type>
+
+<expression> ::= <expression> + <term> | <epxression> - <term> | <term> | <array_value>
+<term> ::= <term> * <factor> | <term> / <factor> | <factor> 
+<factor> ::= ( <expression> ) | <identifier>
+<array_value> ::= <identifier>[<number>]
+
+
+<array_values> ::= <expression> | <expression>, <array_values>
+<array_constant> ::= [<array_values>]
+
+<assign_operator> ::= =|+=|-=|*=|/=
+<assign_stmt> ::= <identifier> <assign_operator> <expression>
+
+<var_decl_stmt> ::= <type> <identifier> | <type> <identifier> = <expression> | <type> <identifier> = <array_constant>
+<condition> ::= <expression> | <expression> <realtion> <expression>
+<realtion> ::= <|<=|>|>=|==|!=
+
+<comment> ::= //<string>
