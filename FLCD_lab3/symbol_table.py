@@ -1,22 +1,22 @@
 from typing import Tuple
 
-MOD = 31
-
 
 class SymbolTable:
+    MOD = 31
+
     def __init__(self):
-        self.__table = [[] for _ in range(MOD)]
+        self.__table = [[] for _ in range(SymbolTable.MOD)]
 
     @staticmethod
     def hash(value) -> int:
         if type(value) == int:
-            return (value + MOD) % MOD
+            return (value + SymbolTable.MOD) % SymbolTable.MOD
 
         if type(value) == str:
-            return sum([ord(c) for c in value]) % MOD
+            return sum([ord(c) for c in value]) % SymbolTable.MOD
 
         if type(value) == chr:
-            return ord(value) % MOD
+            return ord(value) % SymbolTable.MOD
 
     def add(self, value) -> Tuple[int, int]:
         hash_value = SymbolTable.hash(value)
