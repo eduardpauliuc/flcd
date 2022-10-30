@@ -1,0 +1,2 @@
+class LexicalException(RuntimeError):
+    pass

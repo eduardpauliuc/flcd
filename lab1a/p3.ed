@@ -1,8 +1,8 @@
-const number[] v = [1, 2, 3, 4, 5];
+number[] v = [1, 2, 3, 4, 5];
 number sum = 0;
 
 for(n in v){
 	sum += n;
 }
 
-print("Sum is ${sum}")
+print("Sum is sum")

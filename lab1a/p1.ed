@@ -1,6 +1,12 @@
-const number a = 2;
-const number b = 3;
-const number c = 4;
+
+
+// ABC ABC
+// ABC ABC
+
+"stophere"
+number a = 2;
+number b = 3;
+number c = 4;
 number min = a;
 number max = a;
 
@@ -18,4 +24,7 @@ if (c > max){
 	max = c;
 }
 
-print("Max is ${a}, min is ${b}");
+print("Max is: ")
+print(max)
+print(", Min is: ")
+print(min)

@@ -9,24 +9,22 @@ Alphabet:
         a. operators: + - * / % < <= = == >= > != += *= /= -=
         b. separators: () [] {} , ; space
         c. reserved words:
-            - const, number, string
+            - number, string
             - print, for, while, in, read_integer, read_string
     
     II. identifiers
         <nonzero_digit> ::= 1|2|3|4|5|6|7|8|9
         <digit> ::= 0|<nonzero_digit>
         <letter> ::= a|b|...|z|A|B|...|Z
-        <special_symbol> ::= _|$|+|-|*|/|%|<|=|>|!
+        <special_symbol> ::= _|+|-|*|/|%|<|=|>|!
         <language_character> ::= <digit> | <letter> |<special_symbol>
         <identifier> ::= _|<letter>|<identifier><letter>|<identifier><digit>|<identifier>_|
-        
+
     III. constants
         a. integer
             <nonzero_number> ::= <nonzero_number><digit>|<nonzero_digit>
             <number> ::= <nonzero_number>|0
             <signed_number> ::= +<nonzero_number>|-<nonzero_number>|<number>
-        b. character
-            <character> ::= '<language_character>'|''
-        c. string
-            <string> ::= <language_character>|<language_character><string>|${<identifier>}<string>
+        b. string
+            <string> ::= <language_character>|<language_character><string>
             <const_string> ::= "<string>"|""

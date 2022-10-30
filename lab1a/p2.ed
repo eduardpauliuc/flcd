@@ -8,4 +8,5 @@ while(a != b){
 		a -= b;
 }
 
-print("GCD of the two numbers is ${a}");
+print("GCD of the two numbers is");
+print(a);
