@@ -52,8 +52,8 @@ class Scanner:
             self.current_line += 1
 
     def check_constant(self) -> bool:
-        string_expression = re.compile(r"^\"([a-zA-Z0-9_+\-*/%<=>! ]*)\"")
-        number_expression = re.compile(r"^(([+-]*[1-9]+[0-9]*)|0)")
+        string_expression = re.compile(r"^\"([a-zA-Z0-9_+\-*/%<=>!:, ]*)\"")
+        number_expression = re.compile(r"^(([+-]?[1-9]+[0-9]*)|0)")
 
         string_match = string_expression.match(self.program[self.index:])
         number_match = number_expression.match(self.program[self.index:])
@@ -70,7 +70,7 @@ class Scanner:
             return False
 
     def check_identifier(self) -> bool:
-        identifier_expression = re.compile(r"^[_a-zA-Z]+[_a-zA-Z0-9]*")
+        identifier_expression = re.compile(r"^\$[_a-zA-Z]+[_a-zA-Z0-9]*")
         match = identifier_expression.match(self.program[self.index:])
 
         if match is not None:
@@ -91,7 +91,7 @@ class Scanner:
 
         return False
 
-    def read_token(self):
+    def read_next(self):
         current_index = self.index
         changed = True
 
@@ -103,6 +103,8 @@ class Scanner:
 
         if self.index == len(self.program):
             return
+        if self.current_line == 27:
+            pass
 
         if self.check_constant() | self.check_token() | self.check_identifier():
             pass
@@ -118,13 +120,25 @@ class Scanner:
 
         try:
             while self.index < len(self.program):
-                self.read_token()
+                self.read_next()
 
-            print(*self.pif, sep='\n')
+            self.create_output()
         except LexicalException as ex:
             print("Lexical exception:", ex)
 
         return None
+
+    def create_output(self) -> None:
+        with open("PIF.out", "w") as f:
+            for item in self.pif:
+                f.write(str(item) + '\n')
+
+        with open("ST.out", "w") as f:
+            f.write("--- CONSTANTS ---\n")
+            f.write(str(self.constants_table) + '\n')
+            f.write("\n--- IDENTIFIERS ---\n")
+            f.write(str(self.identifiers_table) + '\n')
+
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
-number a = read_integer();
-number b = read_integer();
+number $a = read_integer();
+number $b = read_integer();
 
-while(a != b){	
-	if(a > b)
-		b -= a;
+while($a != $b){
+	if($a > $b)
+		$b -= $a;
 	else
-		a -= b;
+		$a -= $b;
 }
 
 print("GCD of the two numbers is");
-print(a);
+print($a);

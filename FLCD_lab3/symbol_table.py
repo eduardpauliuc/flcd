@@ -27,3 +27,11 @@ class SymbolTable:
         self.__table[hash_value].append(value)
 
         return hash_value, len(self.__table[hash_value]) - 1
+
+    def __str__(self) -> str:
+        result = ""
+        for index, row in enumerate(self.__table):
+            if len(row):
+                result += str(index) + ' - ' + str(row) + '\n'
+
+        return result

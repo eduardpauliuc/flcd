@@ -18,7 +18,8 @@ Alphabet:
         <letter> ::= a|b|...|z|A|B|...|Z
         <special_symbol> ::= _|+|-|*|/|%|<|=|>|!
         <language_character> ::= <digit> | <letter> |<special_symbol>
-        <identifier> ::= _|<letter>|<identifier><letter>|<identifier><digit>|<identifier>_|
+        <identifier_label> ::= _|<letter>|<identifier><letter>|<identifier><digit>|<identifier>_|
+        <identifier> ::= $<identifier_label>
 
     III. constants
         a. integer
