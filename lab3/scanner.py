@@ -3,6 +3,7 @@ from curses.ascii import isspace
 from enum import Enum
 from typing import Optional
 
+from fa.fa import FiniteAutomata
 from lab2.symbol_table import SymbolTable
 from lab3.lexical_exception import LexicalException
 
@@ -28,6 +29,12 @@ class Scanner:
         self.identifiers_table = None
         self.pif = []
 
+        self.int_automata = FiniteAutomata()
+        self.int_automata.read_from_file("../fa/integer_const.in")
+
+        self.identifier_automata = FiniteAutomata()
+        # self.identifier_automata.read_from_file("identifier.in")
+
     def read_tokens(self, tokens_path) -> None:
         with open(tokens_path, "r") as f:
             for x in f:
@@ -51,7 +58,18 @@ class Scanner:
             self.index += 1
             self.current_line += 1
 
+    def check_int_constant(self) -> bool:
+        match = self.int_automata.getMatch(self.program[self.index:])
+        if match:
+            position = self.constants_table.add(match)
+            self.pif.append(("const", position))
+            self.index += len(match)
+            return True
+        return False
+
     def check_constant(self) -> bool:
+        # if self.check_int_constant():
+        #     return True
         string_expression = re.compile(r"^\"([a-zA-Z0-9_+\-*/%<=>!:, ]*)\"")
         number_expression = re.compile(r"^(([+-]?[1-9]+[0-9]*)|0)")
 
@@ -59,6 +77,7 @@ class Scanner:
         number_match = number_expression.match(self.program[self.index:])
 
         match = number_match if string_match is None else string_match
+        # match = string_match
 
         if match is not None:
             value = self.program[self.index: self.index + match.end()]
@@ -138,7 +157,6 @@ class Scanner:
             f.write(str(self.constants_table) + '\n')
             f.write("\n--- IDENTIFIERS ---\n")
             f.write(str(self.identifiers_table) + '\n')
-
 
 
 if __name__ == "__main__":

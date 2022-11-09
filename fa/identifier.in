@@ -1,0 +1,6 @@
+p q
+_ a b c A B C 0 1 2
+p
+q
+p _ q a q b q c q A q B q C q
+q _ q a q b q c q A q B q C q 0 q 1 q 2 q
