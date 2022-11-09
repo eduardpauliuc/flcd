@@ -3,8 +3,8 @@ from curses.ascii import isspace
 from enum import Enum
 from typing import Optional
 
-from FLCD_lab3.symbol_table import SymbolTable
-from lab4.lexical_exception import LexicalException
+from lab2.symbol_table import SymbolTable
+from lab3.lexical_exception import LexicalException
 
 
 class PIFValueType(Enum):
@@ -143,7 +143,7 @@ class Scanner:
 
 if __name__ == "__main__":
     scanner = Scanner("../lab1b/token.in", "output")
-    # scanner.scan("../lab1a/p1.ed")
+    scanner.scan("../lab1a/p1.ed")
     # scanner.scan("../lab1a/p2.ed")
     # scanner.scan("../lab1a/p3.ed")
-    scanner.scan("../lab1a/p1err.ed")
+    # scanner.scan("../lab1a/p1err.ed")
