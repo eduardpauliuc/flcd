@@ -87,15 +87,17 @@ class FiniteAutomata:
 
     def getMatch(self, expression: str) -> Optional[str]:
         state = self.__initial_state
+        last_good_match = ""
         match = ""
         index = 0
-        while state not in self.__final_states:
+        while True:
+            # while state not in self.__final_states:
             element = expression[index]
             index += 1
 
             transitions = list(filter(lambda el: el[0] == element, self.__transitions[state]))
             if len(transitions) == 0:
-                return None
+                break
             elif len(transitions) > 1:
                 print("Not a DFA!")
                 return None
@@ -103,7 +105,11 @@ class FiniteAutomata:
             match += element
             state = transitions[0][1]
 
-        return match if state in self.__final_states else None
+            if state in self.__final_states:
+                last_good_match = match
+
+                # return match if state in self.__final_states else None
+        return last_good_match if len(last_good_match) else None
 
 
 def print_menu():

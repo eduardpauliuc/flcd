@@ -3,8 +3,8 @@
 // ABC ABC
 // ABC ABC
 
-number $a = 2;
-number $a = 3;
+number $a= +23;
+number $a= 3;
 number $c = 4;
 number $min = $a;
 number $max = $a;

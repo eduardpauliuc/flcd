@@ -21,6 +21,7 @@ class Scanner:
     def __init__(self, tokens_path, output_path):
         self.__output_path = output_path
         self.__tokens = []
+        self.__separators = []
         self.read_tokens(tokens_path)
         self.index = 0
         self.current_line = 1
@@ -33,12 +34,19 @@ class Scanner:
         self.int_automata.read_from_file("../fa/integer_const.in")
 
         self.identifier_automata = FiniteAutomata()
-        # self.identifier_automata.read_from_file("identifier.in")
+        self.identifier_automata.read_from_file("../fa/identifier.in")
 
     def read_tokens(self, tokens_path) -> None:
         with open(tokens_path, "r") as f:
+            separators = False
             for x in f:
-                self.__tokens.append(x.strip())
+                if x.strip() == "separators":
+                    separators = True
+                elif separators:
+                    self.__separators.append(x.strip())
+                else:
+                    self.__tokens.append(x.strip())
+            self.__separators.append(' ')
 
     def read_program(self, code_path):
         with open(code_path, "r") as f:
@@ -61,6 +69,9 @@ class Scanner:
     def check_int_constant(self) -> bool:
         match = self.int_automata.getMatch(self.program[self.index:])
         if match:
+            if len(self.program) > self.index + len(match) and \
+                    self.program[self.index + len(match)] not in self.__separators:
+                return False
             position = self.constants_table.add(match)
             self.pif.append(("const", position))
             self.index += len(match)
@@ -68,19 +79,23 @@ class Scanner:
         return False
 
     def check_constant(self) -> bool:
-        # if self.check_int_constant():
-        #     return True
+        if self.check_int_constant():
+            return True
         string_expression = re.compile(r"^\"([a-zA-Z0-9_+\-*/%<=>!:, ]*)\"")
-        number_expression = re.compile(r"^(([+-]?[1-9]+[0-9]*)|0)")
+        # number_expression = re.compile(r"^(([+-]?[1-9]+[0-9]*)|0)")
 
         string_match = string_expression.match(self.program[self.index:])
-        number_match = number_expression.match(self.program[self.index:])
+        # number_match = number_expression.match(self.program[self.index:])
 
-        match = number_match if string_match is None else string_match
-        # match = string_match
+        # match = number_match if string_match is None else string_match
+        match = string_match
 
         if match is not None:
             value = self.program[self.index: self.index + match.end()]
+            if len(self.program) > self.index + match.end() and \
+                    self.program[self.index + match.end()] not in self.__separators:
+                return False
+
             position = self.constants_table.add(value)
             self.pif.append(("const", position))
             self.index += match.end()
@@ -88,18 +103,30 @@ class Scanner:
         else:
             return False
 
-    def check_identifier(self) -> bool:
-        identifier_expression = re.compile(r"^\$[_a-zA-Z]+[_a-zA-Z0-9]*")
-        match = identifier_expression.match(self.program[self.index:])
-
-        if match is not None:
-            value = self.program[self.index: self.index + match.end()]
-            position = self.identifiers_table.add(value)
-            self.pif.append(("id", position))
-            self.index += match.end()
-            return True
-        else:
+    def check_identifier(self, use_automata=True) -> bool:
+        if use_automata:
+            match = self.identifier_automata.getMatch(self.program[self.index:])
+            if match:
+                if len(self.program) > self.index + len(match) \
+                        and self.program[self.index + len(match)] not in self.__separators:
+                    return False
+                position = self.identifiers_table.add(match)
+                self.pif.append(("id", position))
+                self.index += len(match)
+                return True
             return False
+        else:
+            identifier_expression = re.compile(r"^\$[_a-zA-Z]+[_a-zA-Z0-9]*")
+            match = identifier_expression.match(self.program[self.index:])
+
+            if match is not None:
+                value = self.program[self.index: self.index + match.end()]
+                position = self.identifiers_table.add(value)
+                self.pif.append(("id", position))
+                self.index += match.end()
+                return True
+            else:
+                return False
 
     def check_token(self) -> bool:
         for token in self.__tokens:
@@ -122,11 +149,13 @@ class Scanner:
 
         if self.index == len(self.program):
             return
-        if self.current_line == 27:
-            pass
 
-        if self.check_constant() | self.check_token() | self.check_identifier():
-            pass
+        if self.check_constant():
+            return
+        elif self.check_token():
+            return
+        elif self.check_identifier():
+            return
         else:
             raise LexicalException("on line " + str(self.current_line) + " no matching keyword")
 
@@ -161,7 +190,7 @@ class Scanner:
 
 if __name__ == "__main__":
     scanner = Scanner("../lab1b/token.in", "output")
-    scanner.scan("../lab1a/p1.ed")
-    # scanner.scan("../lab1a/p2.ed")
+    # scanner.scan("../lab1a/p1.ed")
+    scanner.scan("../lab1a/p2.ed")
     # scanner.scan("../lab1a/p3.ed")
     # scanner.scan("../lab1a/p1err.ed")
