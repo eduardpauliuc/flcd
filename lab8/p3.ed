@@ -1,0 +1,8 @@
+number[] $v = [1, 2, 3, 4, 5];
+number $sum = 0;
+
+for($n in $v){
+	$sum += $n;
+}
+
+printaaa("Sum is sum")
