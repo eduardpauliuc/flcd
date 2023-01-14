@@ -20,14 +20,12 @@ int yyerror();
 %token IN;
 
 %token IDENTIFIER;
-%token INTCONSTANT;
 %token STRINGCONSTANT;
 
 %token PLUS;
 %token MINUS;
 %token TIMES;
 %token DIV;
-%token MOD;
 %token EQ;
 %token BIGGER;
 %token BIGGEREQ;
@@ -35,8 +33,6 @@ int yyerror();
 %token LESSEQ;
 %token EQQ;
 %token NEQ;
-%token AND;
-%token OR;
 %token PLUSEQ;
 %token MINUSEQ;
 %token TIMESEQ;
@@ -82,13 +78,13 @@ IOStmt : READINT OPEN CLOSE {printf("IOStmt -> READINT () \n");}|
 PrimitiveType : NUMBER {printf("PrimitiveType -> number \n");} | 
                 STRING {printf("PrimitiveType -> string \n");} 
 ArrayType : PrimitiveType ARROPEN ARRCLOSE {printf("ArrayType -> [] \n");} | 
-            PrimitiveType ARROPEN INTCONSTANT ARRCLOSE {printf("PrimitiveType -> [ number ] \n");} 
+            PrimitiveType ARROPEN NUMBER ARRCLOSE {printf("PrimitiveType -> [ number ] \n");} 
 Type : PrimitiveType {printf("Type -> PrimitiveType \n");}| 
        ArrayType {printf("Type -> ArrayType \n");}
 
 Expression : Expression PLUS Term | Expression MINUS Term  | Term | ArrayValue
 Term : Term TIMES Factor | Term DIV Factor | Factor
-Factor : OPEN Expression CLOSE | IDENTIFIER | INTCONSTANT | READINT OPEN CLOSE {printf("IOStmt -> READINT () \n");}
+Factor : OPEN Expression CLOSE | IDENTIFIER | NUMBER | READINT OPEN CLOSE {printf("IOStmt -> READINT () \n");}
 ArrayValue : IDENTIFIER ARROPEN NUMBER ARRCLOSE
 
 ArrayValues : Expression | Expression COMMA ArrayValues
@@ -117,7 +113,7 @@ Condition : Expression {printf("Condition -> Expression \n");}|
 %%
 yyerror(char *s)
 {	
-	printf("%s\n",s);
+	printf("Error parsing: %s\n",s);
 }
 
 extern FILE *yyin;
@@ -125,5 +121,5 @@ extern FILE *yyin;
 main(int argc, char **argv)
 {
 	if(argc>1) yyin =  fopen(argv[1],"r");
-	if(!yyparse()) fprintf(stderr, "\tOK\n");
+	if(!yyparse()) fprintf(stderr, "\n\tParsing OK\n");
 } 

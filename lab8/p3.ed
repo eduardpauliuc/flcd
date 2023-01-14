@@ -5,4 +5,4 @@ for($n in $v){
 	$sum += $n;
 }
 
-printaaa("Sum is sum")
+print("Sum is sum")

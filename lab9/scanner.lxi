@@ -8,40 +8,37 @@
 %option caseless
 
 DIGIT [0-9]
-NON_ZERO_DIGIT [1-9]
-INT_CONSTANT [+-]?{NON_ZERO_DIGIT}{DIGIT}*|0
-LETTER [a-zA-Z_]
-STRING_SYMBOL [\_\+\-\*\/\%\<\=\>\!,:\ ]
-STRING_CONSTANT \"({LETTER}|{DIGIT}|{STRING_SYMBOL})*\"
-IDENTIFIER \${LETTER}({LETTER}|{DIGIT})*
-BAD_IDENTIFIER \$({DIGIT})+({LETTER})+({LETTER}|{DIGIT})*
+NON_ZERO [1-9]
+NUMBER 0|[+-]?{NON_ZERO}{DIGIT}*
+LETTER [a-zA-Z]
+STRING_CONSTANT_SYMBOL [\_\+\-\*\/\%\<\=\>\!,:\ ]
+STRING_CONSTANT \"({LETTER}|{DIGIT}|{STRING_CONSTANT_SYMBOL})*\"
+IDENTIFIER \$({LETTER}|\_)({LETTER}|{DIGIT}|\_)*
+ERROR_IDENTIFIER \$({DIGIT})+({LETTER}|\_)+({LETTER}|{DIGIT}|\_)*
+TOKEN [{|}|,|\[|\]|;|(|)|\+|-|\*|/|%|=|>|>=|<|<=|==|!=|&&||||-=|+=|*=|/=]
 
 %%
 
-"string" { printf("%s - reserved word\n", yytext); return STRING; }
-"number" { printf("%s - reserved word\n", yytext); return NUMBER; }
-"if" { printf("%s - reserved word\n", yytext); return IF; }
-"print" { printf("%s - reserved word\n", yytext); return PRINT; }
-"read_integer" { printf("%s - reserved word\n", yytext); return READINT; }
-"read_string" { printf("%s - reserved word\n", yytext); return READSTRING; }
-"else" { printf("%s - reserved word\n", yytext); return ELSE; }
-"while" { printf("%s - reserved word\n", yytext); return WHILE; }
-"for" { printf("%s - reserved word\n", yytext); return FOR; }
-"in" { printf("%s - reserved word\n", yytext); return IN; }
+"string" { printf("%s - reserved token\n", yytext); return STRING; }
+"number" { printf("%s - reserved token\n", yytext); return NUMBER; }
+"if" { printf("%s - reserved token\n", yytext); return IF; }
+"print" { printf("%s - reserved token\n", yytext); return PRINT; }
+"read_integer" { printf("%s - reserved token\n", yytext); return READINT; }
+"read_string" { printf("%s - reserved token\n", yytext); return READSTRING; }
+"else" { printf("%s - reserved token\n", yytext); return ELSE; }
+"while" { printf("%s - reserved token\n", yytext); return WHILE; }
+"for" { printf("%s - reserved token\n", yytext); return FOR; }
+"in" { printf("%s - reserved token\n", yytext); return IN; }
 
 {IDENTIFIER} {printf("%s - identifier\n", yytext); return IDENTIFIER; }
-
-{BAD_IDENTIFIER} {printf("Error at token %s at line %d\n", yytext, yylineno); return -1;}
-
-{INT_CONSTANT} {printf("%s - int constant\n", yytext); return INTCONSTANT; }
-
+{ERROR_IDENTIFIER} {printf("Bad identifier %s at line %d\n", yytext, yylineno); return -1;}
+{NUMBER} {printf("%s - int constant\n", yytext); return NUMBER; }
 {STRING_CONSTANT} {printf("%s - str constant\n", yytext); return STRINGCONSTANT; }
 
 "+" { printf("%s - operator\n", yytext); return PLUS; }
 "-" { printf("%s - operator\n", yytext); return MINUS; }
 "*" { printf("%s - operator\n", yytext); return TIMES; }
 "/" { printf("%s - operator\n", yytext); return DIV; }
-"%" { printf("%s - operator\n", yytext); return MOD; }
 "=" { printf("%s - operator\n", yytext); return EQ; }
 ">" { printf("%s - operator\n", yytext); return BIGGER; }
 ">=" { printf("%s - operator\n", yytext); return BIGGEREQ; }
@@ -49,8 +46,6 @@ BAD_IDENTIFIER \$({DIGIT})+({LETTER})+({LETTER}|{DIGIT})*
 "<=" { printf("%s - operator\n", yytext); return LESSEQ; }
 "==" { printf("%s - operator\n", yytext); return EQQ; }
 "!=" { printf("%s - operator\n", yytext); return NEQ; }
-"&&" { printf("%s - operator\n", yytext); return AND; }
-"||" { printf("%s - operator\n", yytext); return OR; }
 "+=" { printf("%s - operator\n", yytext); return PLUSEQ; }
 "-=" { printf("%s - operator\n", yytext); return MINUSEQ; }
 "*=" { printf("%s - operator\n", yytext); return TIMESEQ; }
